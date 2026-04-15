@@ -9,19 +9,25 @@ RUN npm run build
 # Stage 2: Build Backend
 FROM eclipse-temurin:25-jdk-alpine-3.23 AS build-backend
 WORKDIR /app/backend
-# Install Maven manually since official maven:3-eclipse-temurin-25 is not yet available
+# Install Maven manually
 RUN apk add --no-cache maven
-# Copy the frontend build to the backend's static resources
-COPY --from=build-frontend /app/frontend/dist /app/backend/src/main/resources/static/
+
+# Copy backend files first
 COPY backend/pom.xml .
 RUN mvn dependency:go-offline
 COPY backend/src ./src
+
+# Overlay the frontend build assets into the backend static resources
+COPY --from=build-frontend /app/frontend/dist /app/backend/src/main/resources/static/
+
+# Build the final JAR
 RUN mvn package -DskipTests
 
 # Stage 3: Runtime
 FROM eclipse-temurin:25-jre-alpine-3.23
 WORKDIR /app
-COPY --from=build-backend /app/backend/target/*.jar app.jar
+# Use the exact artifact ID and version from pom.xml
+COPY --from=build-backend /app/backend/target/backend-0.0.1-SNAPSHOT.jar app.jar
 
 # Render passes the PORT environment variable
 ENV PORT 8080
