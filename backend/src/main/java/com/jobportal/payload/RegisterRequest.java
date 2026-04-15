@@ -2,6 +2,7 @@ package com.jobportal.payload;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.util.Set;
 
 public class RegisterRequest {
@@ -36,7 +37,4 @@ public class RegisterRequest {
 
     public String getSkills() { return skills; }
     public void setSkills(String skills) { this.skills = skills; }
-
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
 }
