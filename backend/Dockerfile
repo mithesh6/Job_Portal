@@ -7,8 +7,10 @@ COPY frontend/ ./
 RUN npm run build
 
 # Stage 2: Build Backend
-FROM maven:3.9.9-eclipse-temurin-25 AS build-backend
+FROM eclipse-temurin:25-jdk-alpine-3.23 AS build-backend
 WORKDIR /app/backend
+# Install Maven manually since official maven:3-eclipse-temurin-25 is not yet available
+RUN apk add --no-cache maven
 # Copy the frontend build to the backend's static resources
 COPY --from=build-frontend /app/frontend/dist /app/backend/src/main/resources/static/
 COPY backend/pom.xml .
@@ -17,7 +19,7 @@ COPY backend/src ./src
 RUN mvn package -DskipTests
 
 # Stage 3: Runtime
-FROM eclipse-temurin:25-jre-alpine
+FROM eclipse-temurin:25-jre-alpine-3.23
 WORKDIR /app
 COPY --from=build-backend /app/backend/target/*.jar app.jar
 
