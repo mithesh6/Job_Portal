@@ -26,6 +26,9 @@ public class Job {
     @Column(name = "date_posted")
     private Date datePosted;
 
+    @Column(nullable = true, length = 1000)
+    private String skills;
+
     public Job() {}
 
     public Job(String title, String description, String company, String location, Date datePosted) {
@@ -54,4 +57,7 @@ public class Job {
 
     public Date getDatePosted() { return datePosted; }
     public void setDatePosted(Date datePosted) { this.datePosted = datePosted; }
+
+    public String getSkills() { return skills; }
+    public void setSkills(String skills) { this.skills = skills; }
 }

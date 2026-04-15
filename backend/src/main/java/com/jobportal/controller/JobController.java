@@ -18,9 +18,38 @@ public class JobController {
     @Autowired
     JobRepository jobRepository;
 
+    @Autowired
+    com.jobportal.repository.UserRepository userRepository;
+
     @GetMapping
-    public List<Job> getAllJobs() {
+    public List<Job> getAllJobs(@RequestParam(required = false) String location, @RequestParam(required = false) String search) {
+        if (location != null && !location.isEmpty()) {
+            return jobRepository.findByLocationContainingIgnoreCase(location);
+        }
+        if (search != null && !search.isEmpty()) {
+            return jobRepository.findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCaseOrSkillsContainingIgnoreCase(search, search, search);
+        }
         return jobRepository.findAll();
+    }
+
+    @GetMapping("/recommendations")
+    @PreAuthorize("hasRole('USER')")
+    public List<Job> getRecommendations(java.security.Principal principal) {
+        String username = principal.getName();
+        return userRepository.findByUsername(username).map(user -> {
+            String userSkills = user.getSkills();
+            if (userSkills == null || userSkills.isEmpty()) return jobRepository.findAll();
+            
+            String[] skillsArray = userSkills.split(",");
+            return jobRepository.findAll().stream()
+                .filter(job -> {
+                    if (job.getSkills() == null) return false;
+                    for (String skill : skillsArray) {
+                        if (job.getSkills().toLowerCase().contains(skill.trim().toLowerCase())) return true;
+                    }
+                    return false;
+                }).toList();
+        }).orElse(List.of());
     }
 
     @GetMapping("/{id}")
@@ -45,6 +74,7 @@ public class JobController {
             job.setDescription(jobDetails.getDescription());
             job.setCompany(jobDetails.getCompany());
             job.setLocation(jobDetails.getLocation());
+            job.setSkills(jobDetails.getSkills());
             return ResponseEntity.ok(jobRepository.save(job));
         }).orElse(ResponseEntity.notFound().build());
     }

@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface JobRepository extends JpaRepository<Job, Long> {
     List<Job> findByTitleContainingIgnoreCase(String title);
+    List<Job> findByLocationContainingIgnoreCase(String location);
+    List<Job> findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCaseOrSkillsContainingIgnoreCase(String title, String description, String skills);
 }

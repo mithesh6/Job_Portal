@@ -13,11 +13,13 @@ public class RegisterRequest {
     private String email;
 
     @NotBlank
+    @Size(min = 6, max = 40)
     private String password;
 
-    private String role;
     private String resumeLink;
     private String phoneNumber;
+    private String skills;
+    private String role;
 
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
@@ -31,4 +33,10 @@ public class RegisterRequest {
     public void setResumeLink(String resumeLink) { this.resumeLink = resumeLink; }
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+
+    public String getSkills() { return skills; }
+    public void setSkills(String skills) { this.skills = skills; }
+
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 }

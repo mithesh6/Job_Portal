@@ -1,6 +1,6 @@
 import api from './api';
 
-const register = (username, email, password, role, resumeLink, phoneNumber) => {
+const register = (username, email, password, role, resumeLink, phoneNumber, skills) => {
   return api.post('/auth/register', {
     username,
     email,
@@ -8,6 +8,7 @@ const register = (username, email, password, role, resumeLink, phoneNumber) => {
     role,
     resumeLink,
     phoneNumber,
+    skills
   });
 };
 

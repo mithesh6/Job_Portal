@@ -1,7 +1,11 @@
 import api from './api';
 
-const getAllJobs = () => {
-  return api.get('/jobs');
+const getAllJobs = (params) => {
+  return api.get('/jobs', { params });
+};
+
+const getRecommendations = () => {
+  return api.get('/jobs/recommendations');
 };
 
 const getJob = (id) => {
@@ -23,6 +27,7 @@ const deleteJob = (id) => {
 const jobService = {
   getAllJobs,
   getJob,
+  getRecommendations,
   createJob,
   updateJob,
   deleteJob,

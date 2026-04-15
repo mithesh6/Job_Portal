@@ -24,6 +24,7 @@ public class User {
 
     private String resumeLink;
     private String phoneNumber;
+    private String skills;
 
     public User() {}
 
@@ -54,4 +55,7 @@ public class User {
 
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+
+    public String getSkills() { return skills; }
+    public void setSkills(String skills) { this.skills = skills; }
 }

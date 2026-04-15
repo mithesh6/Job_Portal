@@ -83,6 +83,7 @@ public class AuthController {
 
         user.setResumeLink(signUpRequest.getResumeLink());
         user.setPhoneNumber(signUpRequest.getPhoneNumber());
+        user.setSkills(signUpRequest.getSkills());
 
         userRepository.save(user);
 
